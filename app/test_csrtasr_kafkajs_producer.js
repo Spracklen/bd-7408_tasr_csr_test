@@ -6,7 +6,17 @@ const {schema, referenceSchemas} = require('./etc/schemas/producerservice');
 
 const name = 'tmg-kafka-csr-producer-framework-example';
 
-const TOPIC_TO_PUBLISH_TO = 's_page_view';
+const TYPE_OF_RUN = process.env.TYPE_OF_RUN || 'CSR';
+const TOPIC_TO_PUBLISH_TO_CSR = process.env.CSR_TOPIC || 'upsolver_csr_test';
+const TOPIC_TO_PUBLISH_TO_TASR = process.env.TASR_TOPIC || 'upsolver_combined_test';
+
+console.info(`Our env is next 
+                    TYPE_OF_RUN ${TYPE_OF_RUN} 
+                    TOPIC_TO_PUBLISH_TO_CSR ${TOPIC_TO_PUBLISH_TO_CSR} 
+                    TOPIC_TO_PUBLISH_TO_TASR ${TOPIC_TO_PUBLISH_TO_TASR}`);
+
+// const TOPIC_TO_PUBLISH_TO_CSR = 'upsolver_csr_test';
+// const TOPIC_TO_PUBLISH_TO_TASR = 'upsolver_combined_test';
 const TASR_SCHEMA_VERSION = '8';
 
 // ID of schema from ./csr/init.sh file
@@ -39,7 +49,7 @@ async function run_flow() {
   const {brokers, csrConfig, tasrURL} = config;
   const {url: csrURL} = csrConfig;
 
-  console.info(`Our env is next brokers ${brokers} and csrURL ${csrURL}`);
+  console.info(`brokers ${brokers} and csrURL ${csrURL}`);
 
   const kafka = new Kafka({
     brokers,
@@ -58,51 +68,59 @@ async function run_flow() {
 // CSR
 //
 
-  const registry = new SchemaRegistry({host: csrURL});
+  if (TYPE_OF_RUN === 'CSR' || TYPE_OF_RUN === 'both') {
 
-  // Upload a schema to the registry
-  const schema = `
+    const registry = new SchemaRegistry({host: csrURL});
+
+    // Upload a schema to the registry
+    const schema = `
   {"name": "PageView", "namespace": "tagged.events", "type": "record", "fields": [{"name": "source__timestamp", "type": "long"}, {"name": "source__agent", "type": "string"}, {"name": "source__ip_address", "type": "string"}, {"name": "page_view__request_uri", "type": "string"}, {"default": null, "name": "page_view__user_id", "type": ["null", "long"]}, {"name": "page_view__session_id", "type": "string"}, {"name": "page_view__ips", "type": "string"}, {"name": "page_view__is_redirect", "type": "boolean"}, {"name": "page_view__guid", "type": "string"}, {"default": null, "name": "page_view__domain", "type": ["null", "string"]}, {"default": null, "name": "page_view__browser_id", "type": ["null", "string"]}, {"default": null, "name": "meta__topic_name", "type": ["null", "string"]}, {"default": null, "name": "meta__request_user_agent", "type": ["null", "string"]}, {"default": null, "name": "meta__request_session_id", "type": ["null", "string"]}, {"default": null, "name": "meta__request_id", "type": ["null", "string"]}, {"default": null, "name": "meta__kvpairs", "type": ["null", {"default": null, "type": "map", "values": ["null", "string"]}]}, {"default": null, "name": "meta__handlers", "type": ["null", {"items": {"fields": [{"name": "timestamp", "type": "long"}, {"name": "agent", "type": "string"}, {"name": "ip_address", "type": "string"}], "name": "Handler", "namespace": "tagged.events", "type": "record"}, "type": "array"}]}]}
   `
-  const { CSR_SCHEMA_ID } = await registry.register({
-    type: SchemaType.AVRO,
-    schema
-  });
+    const { CSR_SCHEMA_ID } = await registry.register({
+      type: SchemaType.AVRO,
+      schema
+    });
 
-  const outgoingMessage = {
-    key: TOPIC_TO_PUBLISH_TO,
-    value: await registry.encode(CSR_SCHEMA_ID, PUBLISH_DATA),
-  };
+    const outgoingMessage = {
+      key: TOPIC_TO_PUBLISH_TO_CSR,
+      value: await registry.encode(CSR_SCHEMA_ID, PUBLISH_DATA),
+    };
 
-  await producer.send({
-    topic: TOPIC_TO_PUBLISH_TO,
-    messages: [outgoingMessage],
-  });
+    await producer.send({
+      topic: TOPIC_TO_PUBLISH_TO_CSR,
+      messages: [outgoingMessage],
+    });
 
-  console.info(`CSR message have been sent to ${TOPIC_TO_PUBLISH_TO}`);
+    console.info(`CSR message have been sent to ${TOPIC_TO_PUBLISH_TO_CSR}`);
+
+  }
 
 //
 // TASR
 //
 
-  const tasrClient = TasrClient.getInstance({tasrURL});
+  if (TYPE_OF_RUN === 'TASR' || TYPE_OF_RUN === 'both') {
 
-  PUBLISH_DATA.tmgtest__test = 'test_2';
+    const tasrClient = TasrClient.getInstance({tasrURL});
 
-  const avroSchema = await tasrClient
-    .lookupSchemaByTopicAndVersion(TOPIC_TO_PUBLISH_TO, TASR_SCHEMA_VERSION);
-  const encodedValue = avroSchema.toBuffer(PUBLISH_DATA);
+    PUBLISH_DATA.tmgtest__test = 'test_2';
 
-  const outgoingMessageTasr = {
-    key: 'key',
-    value: encodedValue,
-  };
+    const avroSchema = await tasrClient
+      .lookupSchemaByTopicAndVersion(TOPIC_TO_PUBLISH_TO_TASR, TASR_SCHEMA_VERSION);
+    const encodedValue = avroSchema.toBuffer(PUBLISH_DATA);
 
-  await producer.send({
-    topic: TOPIC_TO_PUBLISH_TO,
-    messages: [outgoingMessageTasr],
-  });
-  console.info('TASR message have been sent');
+    const outgoingMessageTasr = {
+      key: 'key',
+      value: encodedValue,
+    };
+
+    await producer.send({
+      topic: TOPIC_TO_PUBLISH_TO_TASR,
+      messages: [outgoingMessageTasr],
+    });
+    console.info('TASR message have been sent');
+
+  }
 
   await producer.disconnect();
 
