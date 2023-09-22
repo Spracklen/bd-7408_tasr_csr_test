@@ -22,8 +22,30 @@ const TASR_SCHEMA_VERSION = '8';
 // ID of schema from ./csr/init.sh file
 // const CSR_SCHEMA_ID = 1;
 
-const now = Date.now();
-const PUBLISH_DATA = {};
+const PUBLISH_DATA = {
+  "source__timestamp": 1695402137488,
+  "source__agent": "PHP",
+  "source__ip_address": "10.15.24.153",
+  "page_view__request_uri": "/oauth/verify-session",
+  "page_view__user_id": null,
+  "page_view__session_id": "8c9v8jf1uhie2klidtef44jdd7",
+  "page_view__ips": "35.165.32.121",
+  "page_view__is_redirect": false,
+  "page_view__guid": "BsYXMj8exN",
+  "page_view__domain": "tagged.com",
+  "page_view__browser_id": "E5FB7ACCB7DD1BC3",
+  "meta__topic_name": "s_page_view",
+  "meta__request_user_agent": "tagged/1883 (id=com.taggedapp; variant=release) android/33 (13) sns/6.16.4 (release) okhttp/4.10.0",
+  "meta__request_session_id": "8c9v8jf1uhie2klidtef44jdd7",
+  "meta__request_id": "62730B3969103D56795EBC4AE8F866CD",
+  "meta__kvpairs": [
+    {
+      "key": "index_0",
+      "value": "Android"
+    }
+  ],
+  "meta__handlers": null
+};
 
 process.on('uncaughtException', (err) => {
   console.log(`${name} err_type=exception msg=${err.message} stack: ${err.stack}`);
