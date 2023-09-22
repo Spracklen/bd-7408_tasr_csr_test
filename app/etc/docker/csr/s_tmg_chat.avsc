@@ -1,0 +1,215 @@
+{
+  "name": "tmg_chat",
+  "namespace": "tmg.odp.events",
+  "type": "record",
+  "fields": [
+    {
+      "name": "common__timestamp",
+      "type": "long"
+    },
+    {
+      "name": "common__subject",
+      "type": "string"
+    },
+    {
+      "name": "common__network",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "name": "common__server_ip_address",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__client_ip_address",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__application_version",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__source_agent",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__user_agent",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__platform",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__oauth_token_id",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "chat",
+      "type": [
+        {
+          "fields": [
+            {
+              "name": "messageId",
+              "type": "string"
+            },
+            {
+              "name": "conversationId",
+              "type": "string"
+            },
+            {
+              "name": "fromUser",
+              "type": "string"
+            },
+            {
+              "default": null,
+              "name": "toUser",
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            {
+              "name": "timestamp",
+              "type": "long"
+            },
+            {
+              "name": "type",
+              "type": "string"
+            },
+            {
+              "default": null,
+              "name": "source",
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            {
+              "default": null,
+              "name": "analyticsSource",
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            {
+              "default": null,
+              "name": "isTopPick",
+              "type": [
+                "null",
+                "boolean"
+              ]
+            },
+            {
+              "name": "body",
+              "type": [
+                {
+                  "fields": [
+                    {
+                      "default": null,
+                      "name": "text",
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    {
+                      "default": null,
+                      "name": "url",
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    {
+                      "default": null,
+                      "name": "productId",
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    {
+                      "default": null,
+                      "name": "orderId",
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    {
+                      "default": null,
+                      "name": "questionId",
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    {
+                      "default": null,
+                      "name": "answerId",
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    },
+                    {
+                      "default": null,
+                      "name": "answerDisplay",
+                      "type": [
+                        "null",
+                        "string"
+                      ]
+                    }
+                  ],
+                  "name": "chat_body_record",
+                  "namespace": "tmg.odp.events",
+                  "type": "record"
+                }
+              ]
+            },
+            {
+              "default": null,
+              "name": "processed",
+              "type": [
+                "null",
+                "long"
+              ]
+            }
+          ],
+          "name": "chat_record",
+          "namespace": "tmg.odp.events",
+          "type": "record"
+        }
+      ]
+    }
+  ]
+}

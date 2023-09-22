@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+  consul:
+    image: consul:1.15
+    command: agent -dev -bind 0.0.0.0 -client 0.0.0.0
+    ports:
+      - "8500:8500"
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+  tasr:
+    build: ./tasr
+    depends_on:
+      - redis
+    ports:
+      - "8088:80"
+    environment:
+      SANDBOX_REDIS_HOST: redis
+  kafka:
+    image: wurstmeister/kafka
+    hostname: kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      # https://github.com/wurstmeister/kafka-docker/blob/master/README.md#automatically-create-topics
+      # All kafka topics must be listed here to prevent "This server does not host this topic-partition"
+      KAFKA_CREATE_TOPICS: "s_tmg_test_1:1:1,s_test:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # Modern way of setting listeners.
+      KAFKA_LISTENERS: "INTERNAL://0.0.0.0:9094,OUTSIDE://0.0.0.0:9092"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka:9094,OUTSIDE://127.0.0.1:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+    volumes:
+      - "./data:/data:rw"
+  # Steps to setup CSR in the local environment can be found here: https://confluence.meetmecorp.com/display/GENDEV/Setup+Confluent+Schema+Registry+in+the+NodeJS+local+docker-compose+env
+  schemaregistry:
+    image: "artifactory.amz.mtmemgmt.com/confluent-schema-registry:sandbox"
+    hostname: schemaregistry
+    container_name: schemaregistry
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:9094'
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+      SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN: "*"
+      SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: "INFO"
+    volumes:
+      - "./csr:/csr"
+    entrypoint: "/csr/init.sh"
+    command: "/etc/confluent/docker/run"

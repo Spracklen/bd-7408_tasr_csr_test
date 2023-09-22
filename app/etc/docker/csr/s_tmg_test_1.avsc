@@ -1,0 +1,97 @@
+{
+  "name": "TMGTest",
+  "namespace": "tmg.odp.events",
+  "type": "record",
+  "fields": [
+    {
+      "name": "common__timestamp",
+      "type": "long"
+    },
+    {
+      "name": "common__subject",
+      "type": "string"
+    },
+    {
+      "name": "common__network",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "name": "common__kvpairs",
+      "type": [
+        "null",
+        {
+          "type": "map",
+          "values": [
+            "null",
+            "string"
+          ]
+        }
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__server_ip_address",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__client_ip_address",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__application_version",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__source_agent",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__user_agent",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__platform",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "common__oauth_token_id",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "tmgtest__test",
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  ]
+}

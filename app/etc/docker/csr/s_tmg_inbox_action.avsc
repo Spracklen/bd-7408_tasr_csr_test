@@ -1,0 +1,151 @@
+{
+  "name": "s_tmg_inbox_action",
+  "namespace": "tmg.odp.events",
+  "type": "record",
+  "fields": [
+    {
+      "doc": "TMG Event Timestamp in milliseconds since Epoch",
+      "name": "common__timestamp",
+      "type": "long"
+    },
+    {
+      "doc": "TMG Unique User identifier across all applications",
+      "name": "common__subject",
+      "type": "string"
+    },
+    {
+      "doc": "Brand name or application name of event's source",
+      "name": "common__network",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "doc": "Clients platform",
+      "name": "common__platform",
+      "type": [
+        "null",
+        {
+          "name": "platform_types",
+          "namespace": "tmg.odp.events",
+          "symbols": [
+            "IOS_APP",
+            "ANDROID_APP",
+            "DESKTOP_WEB",
+            "MOBILE_WEB",
+            "API"
+          ],
+          "type": "enum"
+        }
+      ]
+    },
+    {
+      "default": null,
+      "doc": "OAuth Token Id associated with the request / event (user session)",
+      "name": "common__oauth_token_id",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "header",
+      "type": {
+        "fields": [
+          {
+            "name": "network_user_id",
+            "type": "string"
+          },
+          {
+            "name": "locale",
+            "type": "string"
+          },
+          {
+            "name": "device",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          },
+          {
+            "name": "network",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "type": "long"
+          },
+          {
+            "name": "server_timestamp",
+            "type": "long"
+          }
+        ],
+        "name": "header",
+        "namespace": "tmg.odp.events",
+        "type": "record"
+      }
+    },
+    {
+      "name": "body",
+      "type": {
+        "fields": [
+          {
+            "doc": "Inbox Type",
+            "name": "inbox_type",
+            "type": {
+              "name": "inbox_types",
+              "namespace": "tmg.odp.events",
+              "symbols": [
+                "REQUEST_INBOX",
+                "NORMAL_INBOX"
+              ],
+              "type": "enum"
+            }
+          },
+          {
+            "doc": "Inbox Action",
+            "name": "inbox_action",
+            "type": {
+              "name": "action_types",
+              "namespace": "tmg.odp.events",
+              "symbols": [
+                "CREATED",
+                "READ",
+                "REPLY",
+                "DELETED"
+              ],
+              "type": "enum"
+            }
+          },
+          {
+            "doc": "Timestamp of message in milliseconds since Epoch",
+            "name": "message_timestamp",
+            "type": "long"
+          },
+          {
+            "doc": "UUID of Message",
+            "name": "message_id",
+            "type": "string"
+          },
+          {
+            "doc": "TMG Unique User identifier of Message Sender",
+            "name": "message_from_userid",
+            "type": "string"
+          },
+          {
+            "default": null,
+            "doc": "TMG Unique identifier for a thread of messages between users",
+            "name": "conversation_id",
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        ],
+        "name": "body",
+        "namespace": "tmg.odp.events",
+        "type": "record"
+      }
+    }
+  ]
+}

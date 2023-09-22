@@ -1,0 +1,43 @@
+{
+  "name": "tmg-kafka-consumer-framework",
+  "version": "3.1.0",
+  "description": "Handles consumption of kafka messages in a consumer",
+  "main": "index.js",
+  "scripts": {
+    "build:docker": "docker build -t csr_tasr_test -f Dockerfile .",
+    "start:docker": "docker run --net=host csr_tasr_test",
+    "start": "node ./app/test_csrtasr_kafkajs_producer.js",
+    "test": "nyc --check-coverage --lines 90 ./node_modules/mocha/bin/mocha.js --recursive --reporter spec",
+    "lint": "eslint .",
+    "example-docker-services": "docker-compose -f ./example/etc/docker/external-services.yml up"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.meetmecorp.com/Nodejs/tmg-kafka-consumer-framework"
+  },
+  "author": "Justin Morel <jmorel@themeetgroup.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@kafkajs/confluent-schema-registry": "^3.3.0",
+    "@tmg/newrelic-stub": "0.0.1",
+    "async": "^3.2.4",
+    "kafkajs": "^2.1.0",
+    "tmg-tasr": "^3.0.1",
+    "tmg-stats-helper": "^7.1.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^8.25.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-tmg-standards": "^8.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsdoc": "^39.3.13",
+    "meet-logger": "^5.4.0",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "sinon": "^14.0.0",
+    "sinon-chai": "^3.7.0",
+    "tmg-config": "^7.1.0"
+  }
+}

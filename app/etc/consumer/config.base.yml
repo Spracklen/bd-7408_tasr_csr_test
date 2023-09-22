@@ -1,0 +1,26 @@
+logger:
+  loggerName: kafka-consumer-example
+  transports:
+  - type: Console.Default
+    config:
+      level: debug
+consul:
+  host: localhost
+  port: 8500
+kafkaConnections:
+  TestConnection:
+    brokers:
+      - localhost:9092
+kafkaWorkers:
+  - workerName: TestHandler1
+    connectionName: TestConnection
+    consumerOptions:
+      groupId: test-group-id
+    topics:
+      - topicName: s_tmg_test_1
+tasrURL: http://localhost:8088/tasr/subject
+csrConfig:
+  url: http://localhost:8081
+  username: admin
+  password: asdf
+  clientId: test1

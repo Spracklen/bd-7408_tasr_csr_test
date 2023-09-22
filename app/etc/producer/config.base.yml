@@ -1,0 +1,13 @@
+logger:
+  loggerName: kafka-producer-example
+  transports:
+  - type: Console.Default
+    config:
+      level: debug
+consul:
+  host: localhost
+  port: 8500
+brokers:
+  - localhost:9092
+tasrURL: http://localhost:8088/tasr/subject
+csrURL: http://localhost:8081
