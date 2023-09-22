@@ -1,7 +1,7 @@
 {
-  "name": "tmg-kafka-consumer-framework",
+  "name": "upsolver-test",
   "version": "3.1.0",
-  "description": "Handles consumption of kafka messages in a consumer",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "build:docker": "docker build -t csr_tasr_test -f Dockerfile .",
