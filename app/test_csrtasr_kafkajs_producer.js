@@ -38,7 +38,7 @@ process.on('unhandledRejection', (reason, p) => {
 async function run_flow() {
 
   const config = {
-    brokers: 'localhost:9092',
+    brokers: 'regional-kafka-use1-kafka1.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka2.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka3.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka4.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka5.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka6.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka7.use1.amz.mtmeprod.com:9094',
     tasrURL: 'https://tasr.use1.odpprod.com/tasr/subject',
     csrConfig: {
       url: 'https://api.confluent-schema-registry.arms.use1.amz.odpprod.com/'
