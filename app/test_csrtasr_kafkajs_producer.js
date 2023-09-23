@@ -60,7 +60,8 @@ process.on('unhandledRejection', (reason, p) => {
 async function run_flow() {
 
   const config = {
-    brokers: 'regional-kafka-use1-kafka1.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka2.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka3.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka4.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka5.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka6.use1.amz.mtmeprod.com:9094,regional-kafka-use1-kafka7.use1.amz.mtmeprod.com:9094',
+    brokers: ['regional-kafka-use1-kafka1.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka2.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka3.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka4.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka5.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka6.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka7.use1.amz.mtmeprod.com:9094'],
+    // brokers: ['regional-kafka-usw2-kafka1.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka2.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka3.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka4.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka5.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka6.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka7.usw2.amz.mtmeprod.com:9092' ],
     tasrURL: 'https://tasr.use1.odpprod.com/tasr/subject',
     csrConfig: {
       url: 'https://api.confluent-schema-registry.arms.use1.amz.odpprod.com/'
