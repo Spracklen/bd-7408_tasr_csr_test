@@ -6,6 +6,7 @@ FROM ${BASE}
 
 WORKDIR /build
 COPY package*.json ./
+COPY ca-cert ./ca-cert
 
 RUN npm install
 

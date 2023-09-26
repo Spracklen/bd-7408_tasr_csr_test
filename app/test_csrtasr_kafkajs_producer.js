@@ -1,3 +1,4 @@
+const fs = require('fs');
 const {Kafka, Partitioners} = require('kafkajs');
 const {default: TasrClient} = require('tmg-tasr');
 const {SchemaRegistry, SchemaType} = require('@kafkajs/confluent-schema-registry');
@@ -9,6 +10,9 @@ const name = 'tmg-kafka-csr-producer-framework-example';
 const TYPE_OF_RUN = process.env.TYPE_OF_RUN || 'CSR';
 const TOPIC_TO_PUBLISH_TO_CSR = process.env.CSR_TOPIC || 'upsolver_csr_test';
 const TOPIC_TO_PUBLISH_TO_TASR = process.env.TASR_TOPIC || 'upsolver_combined_test';
+
+const SASL_USERNAME = process.env.SASL_USERNAME;
+const SASL_PASSWORD = process.env.SASL_PASSWORD;
 
 console.info(`Our env is next 
                     TYPE_OF_RUN ${TYPE_OF_RUN} 
@@ -60,7 +64,8 @@ process.on('unhandledRejection', (reason, p) => {
 async function run_flow() {
 
   const config = {
-    brokers: ['regional-kafka-use1-kafka1.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka2.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka3.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka4.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka5.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka6.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka7.use1.amz.mtmeprod.com:9094'],
+    brokers: ['odp-kafka-use1-kafka1.amz.odpprod.com:9094','odp-kafka-use1-kafka2.amz.odpprod.com:9094','odp-kafka-use1-kafka3.amz.odpprod.com:9094','odp-kafka-use1-kafka4.amz.odpprod.com:9094','odp-kafka-use1-kafka5.amz.odpprod.com:9094','odp-kafka-use1-kafka6.amz.odpprod.com:9094','odp-kafka-use1-kafka7.amz.odpprod.com:9094','odp-kafka-use1-kafka8.amz.odpprod.com:9094','odp-kafka-use1-kafka9.amz.odpprod.com:9094'],
+    // brokers: ['regional-kafka-use1-kafka1.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka2.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka3.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka4.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka5.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka6.use1.amz.mtmeprod.com:9094','regional-kafka-use1-kafka7.use1.amz.mtmeprod.com:9094'],
     // brokers: ['regional-kafka-usw2-kafka1.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka2.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka3.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka4.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka5.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka6.usw2.amz.mtmeprod.com:9092','regional-kafka-usw2-kafka7.usw2.amz.mtmeprod.com:9092' ],
     tasrURL: 'https://tasr.use1.odpprod.com/tasr/subject',
     csrConfig: {
@@ -77,6 +82,14 @@ async function run_flow() {
   const kafka = new Kafka({
     brokers,
     clientId: 'TestHandler1',
+    sasl: {
+      mechanism: 'SCRAM-SHA-512',
+      username: SASL_USERNAME,
+      password: SASL_PASSWORD
+    },
+    ssl: {
+      ca: [fs.readFileSync('./ca-cert', 'utf-8')]
+    }
   });
   const admin = kafka.admin();
   const producer = kafka.producer({createPartitioner: Partitioners.LegacyPartitioner});
