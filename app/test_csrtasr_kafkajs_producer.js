@@ -17,7 +17,8 @@ const SASL_PASSWORD = process.env.SASL_PASSWORD;
 console.info(`Our env is next 
                     TYPE_OF_RUN ${TYPE_OF_RUN} 
                     TOPIC_TO_PUBLISH_TO_CSR ${TOPIC_TO_PUBLISH_TO_CSR} 
-                    TOPIC_TO_PUBLISH_TO_TASR ${TOPIC_TO_PUBLISH_TO_TASR}`);
+                    TOPIC_TO_PUBLISH_TO_TASR ${TOPIC_TO_PUBLISH_TO_TASR}
+                    v 3`);
 
 // const TOPIC_TO_PUBLISH_TO_CSR = 'upsolver_csr_test';
 // const TOPIC_TO_PUBLISH_TO_TASR = 'upsolver_combined_test';
@@ -83,12 +84,13 @@ async function run_flow() {
     brokers,
     clientId: 'TestHandler1',
     sasl: {
-      mechanism: 'SCRAM-SHA-512',
+      mechanism: 'scram-sha-512',
       username: SASL_USERNAME,
       password: SASL_PASSWORD
     },
     ssl: {
-      ca: [fs.readFileSync('./ca-cert', 'utf-8')]
+      ca: [fs.readFileSync('./ca-cert', 'utf-8')],
+      rejectUnauthorized: false
     }
   });
   const admin = kafka.admin();
